@@ -1,0 +1,19 @@
+{
+  "name": "ponturion",
+  "version": "0.0.1",
+  "description": "The Way is shaped by use, But then the shape is lost.",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Quinten/ponturion.git"
+  },
+  "author": "Quinten Clause",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Quinten/ponturion/issues"
+  },
+  "homepage": "https://github.com/Quinten/ponturion#readme"
+}
