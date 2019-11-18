@@ -15,5 +15,19 @@
   "bugs": {
     "url": "https://github.com/Quinten/ponturion/issues"
   },
-  "homepage": "https://github.com/Quinten/ponturion#readme"
+  "homepage": "https://github.com/Quinten/ponturion#readme",
+  "dependencies": {
+    "phaser": "^3.20.1"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.7.2",
+    "@babel/preset-env": "^7.7.1",
+    "babel-loader": "^8.0.6",
+    "html-webpack-plugin": "^3.2.0",
+    "raw-loader": "^3.1.0",
+    "terser-webpack-plugin": "^2.2.1",
+    "webpack": "^4.41.2",
+    "webpack-cli": "^3.3.10",
+    "webpack-dev-server": "^3.9.0"
+  }
 }
