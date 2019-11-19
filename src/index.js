@@ -14,7 +14,8 @@ if (prePreLoader && prePreLoader.parentNode) {
     prePreLoader.parentNode.removeChild(prePreLoader);
 }
 
-window.fadeColor = { r: 0, g: 0, b: 0 };
+window.fadeColor = Phaser.Display.Color.HexStringToColor('#000000');
+window.bgColor = Phaser.Display.Color.HSLToColor(Math.random(), Math.random(), Math.random());
 
 window.maxSize = 1024;
 

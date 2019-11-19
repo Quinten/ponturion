@@ -18,6 +18,10 @@ class Level extends Phaser.Scene {
         //this.ambient.play();
 
         //this.dust.addOnePixelDust({ count: 12, alpha: .85 , tint: 0x637b89 });
+
+        this.cameras.main.setBackgroundColor(window.bgColor);
+
+        this.cameras.main.flash(2000, window.fadeColor.red, window.fadeColor.green, window.fadeColor.blue);
     }
 
     update(time, delta)
