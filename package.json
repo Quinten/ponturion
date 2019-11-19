@@ -2,9 +2,25 @@
   "name": "ponturion",
   "version": "0.0.1",
   "description": "The Way is shaped by use, But then the shape is lost.",
+  "title": "Ponturion",
+  "shortName": "Ponturion",
+  "body": {
+    "color": "#ffffff",
+    "background": "#000000",
+    "fontFamily": "monospace"
+  },
+  "orientation": "landscape",
+  "twitter": "@supernapie",
+  "website": "https://supernapie.com",
+  "gaId": "UA-116110800-1",
+  "fbId": "1418768124974325",
   "main": "src/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "deploy": "git subtree push --prefix pub/ origin gh-pages",
+    "itch": "butler push pub supernapie/ponturion:HTML",
+    "tiles": "tile-extruder --tileWidth 8 --tileHeight 8 --input ./pub/assets/tiles.png --output ./pub/assets/tiles-extruded.png",
+    "build": "webpack --mode production",
+    "start": "webpack-dev-server --mode development"
   },
   "repository": {
     "type": "git",
@@ -16,6 +32,11 @@
     "url": "https://github.com/Quinten/ponturion/issues"
   },
   "homepage": "https://github.com/Quinten/ponturion#readme",
+  "babel": {
+    "presets": [
+      "@babel/preset-env"
+    ]
+  },
   "dependencies": {
     "phaser": "^3.20.1"
   },
