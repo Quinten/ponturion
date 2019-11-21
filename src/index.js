@@ -5,6 +5,7 @@ import SimplePlatformerControls from './plugins/SimplePlatformerControls.js';
 import Sfx from './plugins/Sfx.js';
 import Ambient from './plugins/Ambient.js';
 //import LevelStats from './plugins/LevelStats.js';
+import MapFlow from './plugins/MapFlow.js';
 import Boot from './scenes/Boot.js';
 import Preloader from './scenes/Preloader.js';
 import Level from './scenes/Level.js';
@@ -52,6 +53,7 @@ var config = {
             { key: 'sfx', plugin: Sfx, mapping: 'sfx', start: true },
             { key: 'ambient', plugin: Ambient, mapping: 'ambient', start: true },
             //{ key: 'levelstats', plugin: LevelStats, mapping: 'levelstats', start: true }
+            { key: 'mapflow', plugin: MapFlow, mapping: 'mapflow', start: true }
         ]
     },
     input: {

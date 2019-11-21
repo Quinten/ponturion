@@ -15,6 +15,21 @@ class Level extends Phaser.Scene {
 
         console.log('level');
 
+        this.controls.start();
+
+        this.controls.events.on('upup', () => {
+            this.mapflow.moveUp();
+        });
+        this.controls.events.on('rightup', () => {
+            this.mapflow.moveRight();
+        });
+        this.controls.events.on('downup', () => {
+            this.mapflow.moveDown();
+        });
+        this.controls.events.on('leftup', () => {
+            this.mapflow.moveLeft();
+        });
+
         //this.ambient.play();
 
         //this.dust.addOnePixelDust({ count: 12, alpha: .85 , tint: 0x637b89 });
@@ -22,6 +37,7 @@ class Level extends Phaser.Scene {
         this.cameras.main.setBackgroundColor(window.bgColor);
 
         this.cameras.main.flash(2000, window.fadeColor.red, window.fadeColor.green, window.fadeColor.blue);
+
     }
 
     update(time, delta)
