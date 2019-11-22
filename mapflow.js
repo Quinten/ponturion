@@ -21,7 +21,13 @@ function fillMap(map) {
         let row = [];
         data.push(row);
         for (let x = 0; x < 64; x++) {
-            row.push(Math.floor(Math.random() * 64));
+            let tile = (Math.round(Math.random()) ? 0 : 63);
+            if ((x > 0) && (y > 0)) {
+                if ((tile === data[y - 1][x - 1]) && (tile !== data[y][x - 1]) && (tile !== data[y - 1][x])) {
+                    tile = data[y][x - 1];
+                }
+            }
+            row.push(tile);
         }
     }
     map.data = data;
