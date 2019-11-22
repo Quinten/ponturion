@@ -34,22 +34,6 @@ class Level extends Phaser.Scene {
 
             this.controls.start();
 
-            // tmp
-            /*
-            this.controls.events.on('upup', () => {
-                this.mapflow.moveUp();
-            });
-            this.controls.events.on('rightup', () => {
-                this.mapflow.moveRight();
-            });
-            this.controls.events.on('downup', () => {
-                this.mapflow.moveDown();
-            });
-            this.controls.events.on('leftup', () => {
-                this.mapflow.moveLeft();
-            });
-            */
-
             this.player = new Player(this, 1.5 * mapSize, 1.5 * mapSize, 'player', 0, 'right');
             this.cameras.main.startFollow(this.player, true);
 
