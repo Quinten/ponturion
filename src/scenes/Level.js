@@ -15,29 +15,57 @@ class Level extends Phaser.Scene {
 
         console.log('level');
 
-        this.controls.start();
-
-        this.controls.events.on('upup', () => {
-            this.mapflow.moveUp();
-        });
-        this.controls.events.on('rightup', () => {
-            this.mapflow.moveRight();
-        });
-        this.controls.events.on('downup', () => {
-            this.mapflow.moveDown();
-        });
-        this.controls.events.on('leftup', () => {
-            this.mapflow.moveLeft();
-        });
-
         //this.ambient.play();
 
         //this.dust.addOnePixelDust({ count: 12, alpha: .85 , tint: 0x637b89 });
 
-        this.cameras.main.setBackgroundColor(window.bgColor);
+        this.mapCache = {};
 
-        this.cameras.main.flash(2000, window.fadeColor.red, window.fadeColor.green, window.fadeColor.blue);
+        this.mapflow.events.once('mapsupdated', (data) => {
 
+            // create the maps
+            console.log(data);
+            data.add.forEach(this.addMap.bind(this));
+
+            this.cameras.main.setBackgroundColor(window.bgColor);
+//            this.cameras.main.flash(2000, window.fadeColor.red, window.fadeColor.green, window.fadeColor.blue);
+
+            this.controls.start();
+
+            // tmp
+            this.controls.events.on('upup', () => {
+                this.mapflow.moveUp();
+            });
+            this.controls.events.on('rightup', () => {
+                this.mapflow.moveRight();
+            });
+            this.controls.events.on('downup', () => {
+                this.mapflow.moveDown();
+            });
+            this.controls.events.on('leftup', () => {
+                this.mapflow.moveLeft();
+            });
+
+            this.mapflow.events.on('mapsupdated', (data) => {
+                data.add.forEach(this.addMap.bind(this));
+                data.remove.forEach(this.removeMap.bind(this));
+            });
+        });
+        this.mapflow.initMaps();
+    }
+
+    addMap(mapData) {
+        let tiledata = mapData.data;
+        let map = this.make.tilemap({ data: tiledata, tileWidth: 8, tileHeight: 8});
+        let tiles = map.addTilesetImage('tiles', 'tiles', 8, 8, 0, 0);
+        let layer = map.createStaticLayer(0, tiles, mapData.x * 32, mapData.y * 32);
+        this.mapCache[String(mapData.id)] = map;
+    }
+
+    removeMap(mapData) {
+        let map = this.mapCache[String(mapData.id)];
+        map.destroy();
+        delete this.mapCache[String(mapData.id)];
     }
 
     update(time, delta)

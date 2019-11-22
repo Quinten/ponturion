@@ -3,11 +3,15 @@ class MapFlow extends Phaser.Plugins.BasePlugin {
     constructor (pluginManager)
     {
         super(pluginManager);
+        this.events = new Phaser.Events.EventEmitter();
         this.worker = new Worker('mapflow.js');
         this.worker.onmessage = function(e) {
-            console.log('Message received from worker');
-            console.log(e.data);
-        }
+            this.events.emit('mapsupdated', e.data);
+        }.bind(this);
+    }
+
+    initMaps() {
+        this.worker.postMessage({event: 'init'});
     }
 
     moveUp() {
