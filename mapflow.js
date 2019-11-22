@@ -10,31 +10,58 @@ function createMap(x, y) {
     return {
         id: getNextId(),
         x: x,
-        y: y
+        y: y,
+        data: undefined
     };
 }
 
-for (var i = 0; i < 9; i++) {
-    maps.push(createMap(i % 3, ~~(i / 3) % 3));
+function fillMap(map) {
+    let data = [];
+    for (let y = 0; y < 4; y++) {
+        let row = [];
+        data.push(row);
+        for (let x = 0; x < 4; x++) {
+            row.push(~~(Math.random() * 64));
+        }
+    }
+    map.data = data;
 }
 
-for (var i = 9; i < 12; i++) {
-    maps.push(createMap(i - 9, -1));
+function initMaps() {
+
+    maps = [];
+    id = 0;
+
+    for (var i = 0; i < 9; i++) {
+        maps.push(createMap(i % 3, ~~(i / 3) % 3));
+    }
+
+    for (var i = 9; i < 12; i++) {
+        maps.push(createMap(i - 9, -1));
+    }
+
+    for (var i = 12; i < 15; i++) {
+        maps.push(createMap(3, i % 3));
+    }
+
+    for (var i = 15; i < 18; i++) {
+        maps.push(createMap(17 - i, 3));
+    }
+
+    for (var i = 18; i < 21; i++) {
+        maps.push(createMap(-1, 20 - i));
+    }
+
+    maps.forEach(fillMap);
 }
 
-for (var i = 12; i < 15; i++) {
-    maps.push(createMap(3, i % 3));
+function refillMaps() {
+    maps.forEach(function (map) {
+        if (!map.data) {
+            fillMap(map);
+        }
+    });
 }
-
-for (var i = 15; i < 18; i++) {
-    maps.push(createMap(17 - i, 3));
-}
-
-for (var i = 18; i < 21; i++) {
-    maps.push(createMap(-1, 20 - i));
-}
-
-console.log(maps);
 
 function moveUp() {
 
@@ -57,6 +84,7 @@ function moveUp() {
         add: add,
         remove: remove
     });
+    refillMaps();
 }
 
 function moveRight() {
@@ -80,6 +108,7 @@ function moveRight() {
         add: add,
         remove: remove
     });
+    refillMaps();
 }
 
 function moveDown() {
@@ -103,6 +132,7 @@ function moveDown() {
         add: add,
         remove: remove
     });
+    refillMaps();
 }
 
 function moveLeft() {
@@ -126,14 +156,20 @@ function moveLeft() {
         add: add,
         remove: remove
     });
+    refillMaps();
 }
 
 onmessage = function(e) {
-    //console.log('Message received from main script');
-    //var result = 'Event: ' + (e.data.event);
-    //console.log('Posting message back to main script');
-    //postMessage(result);
+
     switch (e.data.event) {
+        case 'init':
+            initMaps();
+            postMessage({
+                current: maps[4].id,
+                add: maps.slice(0, 9),
+                remove: []
+            });
+            break;
         case 'moveup':
             moveUp();
             break;
