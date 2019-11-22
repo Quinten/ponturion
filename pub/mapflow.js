@@ -17,11 +17,11 @@ function createMap(x, y) {
 
 function fillMap(map) {
     let data = [];
-    for (let y = 0; y < 4; y++) {
+    for (let y = 0; y < 64; y++) {
         let row = [];
         data.push(row);
-        for (let x = 0; x < 4; x++) {
-            row.push(~~(Math.random() * 64));
+        for (let x = 0; x < 64; x++) {
+            row.push(Math.floor(Math.random() * 64));
         }
     }
     map.data = data;
@@ -33,7 +33,7 @@ function initMaps() {
     id = 0;
 
     for (var i = 0; i < 9; i++) {
-        maps.push(createMap(i % 3, ~~(i / 3) % 3));
+        maps.push(createMap(i % 3, Math.floor(i / 3) % 3));
     }
 
     for (var i = 9; i < 12; i++) {

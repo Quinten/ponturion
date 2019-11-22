@@ -1,4 +1,6 @@
-//import Player from '../sprites/Player.js';
+import Player from '../sprites/Player.js';
+
+const mapSize = 512;
 
 class Level extends Phaser.Scene {
 
@@ -33,6 +35,7 @@ class Level extends Phaser.Scene {
             this.controls.start();
 
             // tmp
+            /*
             this.controls.events.on('upup', () => {
                 this.mapflow.moveUp();
             });
@@ -45,6 +48,12 @@ class Level extends Phaser.Scene {
             this.controls.events.on('leftup', () => {
                 this.mapflow.moveLeft();
             });
+            */
+
+            this.player = new Player(this, 1.5 * mapSize, 1.5 * mapSize, 'player', 0, 'right');
+            this.cameras.main.startFollow(this.player, true);
+
+            this.zone = {x: 1, y: 1};
 
             this.mapflow.events.on('mapsupdated', (data) => {
                 data.add.forEach(this.addMap.bind(this));
@@ -58,7 +67,7 @@ class Level extends Phaser.Scene {
         let tiledata = mapData.data;
         let map = this.make.tilemap({ data: tiledata, tileWidth: 8, tileHeight: 8});
         let tiles = map.addTilesetImage('tiles', 'tiles', 8, 8, 0, 0);
-        let layer = map.createStaticLayer(0, tiles, mapData.x * 32, mapData.y * 32);
+        let layer = map.createStaticLayer(0, tiles, mapData.x * mapSize, mapData.y * mapSize);
         this.mapCache[String(mapData.id)] = map;
     }
 
@@ -70,6 +79,25 @@ class Level extends Phaser.Scene {
 
     update(time, delta)
     {
+        if (this.player) {
+            this.player.update(this.controls);
+            let zone = { x: Math.floor(this.player.x / mapSize), y: Math.floor(this.player.y / mapSize) };
+            let dirX = this.zone.x - zone.x;
+            let dirY = this.zone.y - zone.y;
+            if (dirY > 0) {
+                this.mapflow.moveUp();
+            }
+            if (dirX < 0) {
+                this.mapflow.moveRight();
+            }
+            if (dirY < 0) {
+                this.mapflow.moveDown();
+            }
+            if (dirX > 0) {
+                this.mapflow.moveLeft();
+            }
+            this.zone = zone;
+        }
     }
 
     resizeField(w, h)

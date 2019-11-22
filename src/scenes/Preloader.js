@@ -92,6 +92,7 @@ class Preloader extends Phaser.Scene {
         this.load.audioSprite('teleport', 'assets/teleport.json', 'assets/teleport.mp3');
         */
         this.load.image('tiles', 'assets/tiles.png');
+        this.load.spritesheet('player', 'assets/player.png', { frameWidth: 16, frameHeight: 16 });
         this.load.image('gamepaused', 'assets/gamepaused.png');
         this.load.image('napie-eight-font', 'assets/napie-eight-font.png');
     }
