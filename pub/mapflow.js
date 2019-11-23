@@ -23,6 +23,13 @@ const weights = [
     2, 2, 0, 0, 0, 1, 0, 0,
     2, 2, 0, 0, 0, 1, 0, 0
 ];
+const tiles = [
+    0, 32, 32, 35,
+    32, 37, 38, 39,
+    32, 41, 42, 43,
+    44, 45, 46, 48,
+    34, 36, 40, 33
+];
 
 function fillMap(map) {
     var leftMap = getMap(map.x - 1, map.y);
@@ -203,8 +210,48 @@ function fillMap(map) {
             row.push(tile);
         }
     }
+    // autotile
+    let tileData = [];
+    for (let y = 0; y < mapSize * 3; y++) {
+        let row = [];
+        tileData.push(row);
+        for (let x = 0; x < mapSize * 3; x++) {
+            let tile = 0;
+            if (expandedData[y][x]) {
+                let weight = 0;
+                if (y === 0 || expandedData[y - 1][x]) {
+                    weight += 1;
+                }
+                if (x === (mapSize * 3 - 1) || expandedData[y][x + 1]) {
+                    weight += 2;
+                }
+                if (y === (mapSize * 3 - 1) || expandedData[y + 1][x]) {
+                    weight += 4;
+                }
+                if (x === 0 || expandedData[y][x - 1]) {
+                    weight += 8;
+                }
+                if (weight === 15) {
+                    if (y > 0 && x > 0 && !expandedData[y - 1][x - 1]) {
+                        weight += 1;
+                    }
+                    if (y > 0 && x < ((mapSize * 3) - 1) && !expandedData[y - 1][x + 1]) {
+                        weight += 2;
+                    }
+                    if (y < ((mapSize * 3) - 1) && x < ((mapSize * 3) - 1) && !expandedData[y + 1][x + 1]) {
+                        weight += 3;
+                    }
+                    if (y < ((mapSize * 3) - 1) && x > 0  && !expandedData[y + 1][x - 1]) {
+                        weight += 4;
+                    }
+                }
+                tile = tiles[weight];
+            }
+            row.push(tile);
+        }
+    }
     map.rawData = data;
-    map.data = expandedData;
+    map.data = tileData;
 }
 
 function initMaps() {

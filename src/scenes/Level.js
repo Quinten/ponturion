@@ -1,6 +1,6 @@
 import Player from '../sprites/Player.js';
 
-const mapSize = 484;
+const mapSize = 480;
 
 class Level extends Phaser.Scene {
 
@@ -50,7 +50,7 @@ class Level extends Phaser.Scene {
     addMap(mapData) {
         let tiledata = mapData.data;
         let map = this.make.tilemap({ data: tiledata, tileWidth: 8, tileHeight: 8});
-        let tiles = map.addTilesetImage('tiles', 'tiles', 8, 8, 0, 0);
+        let tiles = map.addTilesetImage('tiles', 'tiles', 8, 8, 1, 2);
         let layer = map.createStaticLayer(0, tiles, mapData.x * mapSize, mapData.y * mapSize);
         this.mapCache[String(mapData.id)] = map;
     }
