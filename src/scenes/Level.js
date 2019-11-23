@@ -1,6 +1,6 @@
 import Player from '../sprites/Player.js';
 
-const mapSize = 512;
+const mapSize = 484;
 
 class Level extends Phaser.Scene {
 

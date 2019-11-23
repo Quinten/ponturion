@@ -15,22 +15,196 @@ function createMap(x, y) {
     };
 }
 
+const wall = 1;
+const mapSize = 20;
+const weights = [
+    1, 1, 1, 1, 0, 1, 0, 0,
+    2, 2, 0, 0, 0, 1, 0, 0,
+    2, 2, 0, 0, 0, 1, 0, 0,
+    2, 2, 0, 0, 0, 1, 0, 0
+];
+
 function fillMap(map) {
+    var leftMap = getMap(map.x - 1, map.y);
+    var upMap = getMap(map.x, map.y - 1);
     let data = [];
-    for (let y = 0; y < 64; y++) {
-        let row = [];
+    let row = [];
+    if (upMap && upMap.rawData) {
+        for (let x = 0; x < mapSize; x++) {
+            let tile = 0;
+            if (upMap.rawData[mapSize - 1][x]) {
+                tile = 1;
+            }
+            row.push(tile);
+        }
+    } else {
+        for (let x = 0; x < mapSize; x++) {
+            let tile = (Math.round(Math.random()) ? 0 : wall);
+            row.push(tile);
+        }
+    }
+    data.push(row);
+    for (let y = 1; y < mapSize; y++) {
+        row = [];
         data.push(row);
-        for (let x = 0; x < 64; x++) {
-            let tile = (Math.round(Math.random()) ? 0 : 63);
+        for (let x = 0; x < mapSize; x++) {
+            // idea 1
+            /*
+            let tile = (Math.round(Math.random()) ? 0 : wall);
             if ((x > 0) && (y > 0)) {
                 if ((tile === data[y - 1][x - 1]) && (tile !== data[y][x - 1]) && (tile !== data[y - 1][x])) {
                     tile = data[y][x - 1];
                 }
+                if (x > 1 && !tile && !data[y][x - 2] && data[y][x - 1]) {
+                   data[y][x - 1] = 0;
+                }
+                if (y > 2 && !tile && !data[y - 2][x] && !data[y - 1][x] &&!data[y - 3][x]) {
+                   tile = wall;
+                }
+                if (y > 1 && !tile && !data[y - 2][x] && data[y - 1][x]) {
+                   data[y - 1][x] = 0;
+                   tile = wall;
+                }
             }
+            */
+            // idea 2
+            /*
+            let tile = 0;
+            //if (y > 0) {
+                tile = (Math.round(Math.random()) ? 0 : wall);
+            //}
+            if (y > 2 && !data[y - 3][x] && !data[y - 2][x] && !data[y - 1][x]) {
+                tile = wall;
+                if (x > 0) {
+                    data[y][x - 1] = wall;
+                    data[y - 1][x - 1] = wall;
+                }
+            }
+            if (y > 0 && x > 0 && !tile && !data[y - 1][x - 1] && data[y - 1][x] && data[y][x - 1]) {
+                data[y - 1][x] = 0;
+                if (y > 2) {
+                    data[y - 2][x] = 0;
+                }
+            }*/
+            // idea 3
+            let tile = 0;
+            if (x === 0 && leftMap && leftMap.rawData) {
+                tile = leftMap.rawData[y][mapSize - 1];
+            } else if (x === 0 || y < 3) {
+                tile = (Math.round(Math.random()) ? 0 : wall);
+                if ((x > 0) && (y > 0)) {
+                    if ((tile === data[y - 1][x - 1]) && (tile !== data[y][x - 1]) && (tile !== data[y - 1][x])) {
+                        tile = data[y][x - 1];
+                    }
+                }
+            } else {
+                let weight = 0;
+                if (data[y][x - 1]) {
+                    weight += 1;
+                }
+                if (data[y - 1][x - 1]) {
+                    weight += 2;
+                }
+                if (data[y - 1][x]) {
+                    weight += 4;
+                }
+                if (data[y - 2][x]) {
+                    weight += 8;
+                }
+                if (data[y - 3][x]) {
+                    weight += 16;
+                }
+                tile = weights[weight];
+                if (tile === 2) {
+                    tile = (Math.round(Math.random()) ? 0 : wall);
+                }
+                if (weight === 2) {
+                    data[y][x - 1] = wall;
+                    // super rare
+                    if (x === 1 && leftMap && leftMap.rawData && !leftMap.rawData[y][mapSize - 1]) {
+                        data[y][x - 1] = 0;
+                        tile = 0;
+                    }
+                }
+            }
+
             row.push(tile);
         }
     }
-    map.data = data;
+    // block of the sides
+    /*
+    for (let x = 0; x < mapSize; x++) {
+        data[0][x] = wall;
+        data[mapSize - 1][x] = wall;
+        let y = 1;
+        while(!data[y][x]) {
+            data[y][x] = wall;
+            y++;
+        }
+        y = mapSize - 2;
+        while(!data[y][x]) {
+            data[y][x] = wall;
+            y--;
+        }
+    }
+    for (let y = 0; y < mapSize; y++) {
+        data[y][0] = wall;
+        data[y][mapSize - 1] = wall;
+        let x = 1;
+        while(!data[y][x]) {
+            data[y][x] = wall;
+            x++;
+        }
+        x = mapSize - 2;
+        while(!data[y][x]) {
+            data[y][x] = wall;
+            x--;
+        }
+    }
+    */
+    // connect maps
+    var downMap = getMap(map.x, map.y + 1);
+    if (downMap && downMap.rawData) {
+        for (let x = 0; x < mapSize; x++) {
+            if (!downMap.rawData[0][x]) {
+                data[mapSize - 1][x] = 0;
+            } else {
+                data[mapSize - 1][x] = wall;
+                let y = mapSize - 2;
+                while (y >= 0 && !data[y][x]) {
+                    data[y][x] = wall;
+                    y--;
+                }
+            }
+        }
+    }
+    var rightMap = getMap(map.x + 1, map.y);
+    if (rightMap && rightMap.rawData) {
+        for (let y = 0; y < mapSize; y++) {
+            if (rightMap.rawData[y][0]) {
+                data[y][mapSize - 1] = wall;
+            } else {
+                data[y][mapSize - 1] = 0;
+                let x = mapSize - 2;
+                while (x >= 0 && data[y][x]) {
+                    data[y][x] = 0;
+                    x--;
+                }
+            }
+        }
+    }
+    // expand map
+    let expandedData = [];
+    for (let y = 0; y < mapSize * 3; y++) {
+        let row = [];
+        expandedData.push(row);
+        for (let x = 0; x < mapSize * 3; x++) {
+            let tile = (data[Math.floor(y / 3)][Math.floor(x / 3)]) ? 63 : 0;
+            row.push(tile);
+        }
+    }
+    map.rawData = data;
+    map.data = expandedData;
 }
 
 function initMaps() {
@@ -67,6 +241,16 @@ function refillMaps() {
             fillMap(map);
         }
     });
+}
+
+function getMap(x, y) {
+    var foundMap = undefined;
+    maps.forEach(function (map) {
+        if (!foundMap && map.x === x && map.y === y) {
+            foundMap = map;
+        }
+    });
+    return foundMap;
 }
 
 function moveUp() {
