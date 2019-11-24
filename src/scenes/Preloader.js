@@ -31,7 +31,7 @@ class Preloader extends Phaser.Scene {
         */
         //this.load.image('tiles', 'assets/tiles.png');
         this.load.image('tiles', 'assets/tiles-extruded.png');
-        this.load.spritesheet('player', 'assets/player.png', { frameWidth: 32, frameHeight: 32 });
+        this.load.spritesheet('player', 'assets/player.png', { frameWidth: 16, frameHeight: 16 });
         this.load.image('gamepaused', 'assets/gamepaused.png');
         this.load.image('napie-eight-font', 'assets/napie-eight-font.png');
     }
