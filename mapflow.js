@@ -31,6 +31,16 @@ const tiles = [
     34, 36, 40, 33
 ];
 
+const solidFills = [
+    49, 50, 51,
+    56, 57, 58, 59
+];
+const bgFills = [
+    14, 13,
+    23, 22, 21, 20,
+    30
+];
+
 function fillMap(map) {
     var leftMap = getMap(map.x - 1, map.y);
     var upMap = getMap(map.x, map.y - 1);
@@ -246,6 +256,11 @@ function fillMap(map) {
                     }
                 }
                 tile = tiles[weight];
+                if (weight === 15) {
+                    tile = solidFills[Math.floor(Math.random() * solidFills.length)];
+                }
+            } else {
+                tile = bgFills[Math.floor(Math.random() * bgFills.length)];
             }
             row.push(tile);
         }
