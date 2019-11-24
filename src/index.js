@@ -19,7 +19,7 @@ window.fadeColor = Phaser.Display.Color.HexStringToColor('#000000');
 //window.bgColor = Phaser.Display.Color.HSLToColor(Math.random(), Math.random(), Math.random());
 window.bgColor = Phaser.Display.Color.HSLToColor(0, 0, 0);
 
-window.maxSize = 1024;
+window.maxSize = 960;
 
 let longestSide = Math.max(window.innerWidth, window.innerHeight);
 let zoom = 2 * Math.max(1, Math.floor(longestSide / window.maxSize));
@@ -40,8 +40,8 @@ var config = {
     physics: {
         default: 'arcade',
         arcade: {
-            gravity: { y: 0 },
-            debug: true
+            gravity: { y: 250 },
+            debug: false
         }
     },
     plugins: {
